@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: lemur-nginx
+  name: lemur-nginx
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: lemur-nginx
+    spec:
+      containers:
+      - image: amcchesneytaos/lemur-kube-nginx
+        name: lemur-nginx
+        ports:
+        - containerPort: 80
+      restartPolicy: Always
