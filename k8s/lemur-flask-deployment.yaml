@@ -34,8 +34,8 @@ spec:
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: lemur-db-credentials
-              key: password
+              name: lemur-config
+              key: POSTGRES_PASSWORD
         - name: SECRET_KEY
           valueFrom:
             secretKeyRef:
