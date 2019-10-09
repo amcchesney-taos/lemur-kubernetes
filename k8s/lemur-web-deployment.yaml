@@ -1,0 +1,66 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: lemur-flask
+  name: lemur-flask
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: lemur-flask
+    spec:
+      containers:
+      - env:
+        - name: DEBUG
+          value: "False"
+        - name: LEMUR_CONF
+          value: /usr/local/src/lemur/lemur.conf.py
+        - name: LEMUR_DEFAULT_COUNTRY
+          value: US
+        - name: LEMUR_DEFAULT_STATE
+          value: California
+        - name: LEMUR_DEFAULT_LOCATION
+          value: SomeLocation
+        - name: LEMUR_DEFAULT_ORGANIZATION
+          value: SomeOrganization
+        - name: LEMUR_DEFAULT_ORGANIZATIONAL_UNIT
+          value: Example
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: lemur-db-credentials
+              key: password
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: lemur-config
+              key: SECRET_KEY
+        - name: LEMUR_TOKEN_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: lemur-config
+              key: LEMUR_TOKEN_SECRET
+        - name: LEMUR_ENCRYPTION_KEYS
+          valueFrom:
+            secretKeyRef:
+              name: lemur-config
+              key: LEMUR_ENCRYPTION_KEYS
+        image: amcchesneytaos/lemur-kube-flask
+        name: lemur-flask
+        resources: {}
+        livenessProbe:
+          httpGet:
+            path: /api/1/auth/providers
+            port: 8000
+        readinessProbe:
+          httpGet:
+            path: /api/1/auth/providers
+            port: 8000
+      restartPolicy: Always
+status: {}

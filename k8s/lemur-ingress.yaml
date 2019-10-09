@@ -1,0 +1,17 @@
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: lemur-ingress
+  namespace: lemur
+spec:
+  backend:
+    serviceName: lemur-nginx
+    servicePort: 80
+  rules:
+  - http:
+      paths:
+      - path: /api/*
+        backend:
+          serviceName: lemur-flask
+          servicePort: 80
